@@ -1,8 +1,35 @@
 # StudioRelay CLI · Claude Code connector
 
-Local Node.js/TypeScript CLI, stdio MCP server and Claude Code Skill. MIT licensed. This public repository contains only the connector and API contracts; the StudioRelay backend and social credentials are not distributed.
+Local Node.js/TypeScript CLI, stdio MCP server and Claude Code Skill. MIT licensed. This repository contains only the public connector and API contracts; the StudioRelay backend and social credentials are not distributed.
 
 **Release status:** version 0.1.0 is prepared for testing. It is not yet published on npm. Do not advertise an npm installation as available until the package is released.
+
+## Démarrage rapide
+
+Le dépôt public est disponible : [abdifrh/studiorelay-cli](https://github.com/abdifrh/studiorelay-cli). Le package **n’est pas encore publié sur npm**. Pour l’installer maintenant, construisez l’archive depuis ce dépôt :
+
+```sh
+git clone https://github.com/abdifrh/studiorelay-cli.git
+cd studiorelay-cli
+npm ci --ignore-scripts
+npm test
+npm run check:package
+npm pack
+npm install -g ./studiorelay-cli-0.1.0.tgz
+```
+
+Puis, dans votre studio, en remplaçant le chemin par votre dossier réel :
+
+```sh
+studiorelay init --server https://studiorelay.fr --media-root "CHEMIN_ABSOLU_DU_STUDIO"
+studiorelay login
+studiorelay claude install
+studiorelay doctor
+```
+
+Redémarrez Claude Code et ouvrez `/mcp`. L’administrateur doit d’abord activer le connecteur côté StudioRelay et vous attribuer l’accès à une marque. Les clés ne doivent jamais être transmises dans un prompt. La publication automatique exige un consentement explicite, le droit `approve` et des règles éditoriales complètes ; sinon, le parcours reste en brouillon.
+
+Le code public sur GitHub, la publication du package sur npm et l’activation du serveur sont trois étapes distinctes. Ce dépôt ne suffit pas à activer le connecteur sur une instance StudioRelay.
 
 ## Requirements
 
