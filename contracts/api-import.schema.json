@@ -1,0 +1,99 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "StudioRelay private import v2",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "external_id",
+    "title"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": 2
+    },
+    "external_id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 200
+    },
+    "brand": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 100
+    },
+    "title": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 200
+    },
+    "destinations": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "account_id",
+          "platform"
+        ],
+        "properties": {
+          "account_id": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "platform": {
+            "enum": [
+              "youtube",
+              "instagram",
+              "facebook",
+              "tiktok"
+            ]
+          },
+          "title": {
+            "type": "string",
+            "maxLength": 200
+          },
+          "description": {
+            "type": "string",
+            "maxLength": 50000
+          },
+          "parameters": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "privacy": {
+                "enum": [
+                  "private",
+                  "unlisted",
+                  "public"
+                ]
+              },
+              "made_for_kids": {
+                "type": "boolean"
+              },
+              "synthetic_media": {
+                "type": "boolean"
+              },
+              "category_id": {
+                "type": "string",
+                "pattern": "^[0-9]{1,4}$"
+              },
+              "share_to_feed": {
+                "type": "boolean"
+              },
+              "is_ai_generated": {
+                "type": "boolean"
+              }
+            }
+          },
+          "scheduled_at": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "maxItems": 50,
+      "minItems": 0
+    }
+  }
+}

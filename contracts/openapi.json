@@ -1,0 +1,3452 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "StudioRelay Private Studio API",
+    "version": "1.2.0",
+    "description": "API Bearer privée ; statut HTTP distinct des résultats sociaux. Aucun accès au stockage ni jeton OAuth."
+  },
+  "servers": [
+    {
+      "url": "https://studiorelay.fr/api/v1"
+    }
+  ],
+  "security": [
+    {
+      "StudioBearer": []
+    }
+  ],
+  "paths": {
+    "/identity/": {
+      "get": {
+        "operationId": "get__identity_",
+        "summary": "Droit requis : read",
+        "security": [
+          {
+            "StudioBearer": []
+          },
+          {
+            "NativeOAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ressource ou mutation enregistrée ; ne prouve pas une publication distante.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "request_id": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/Identity"
+                    }
+                  },
+                  "required": [
+                    "request_id",
+                    "data"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Erreur structurée ; voir docs/private-api.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Erreur structurée ; voir docs/private-api.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Erreur structurée ; voir docs/private-api.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Erreur structurée ; voir docs/private-api.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "405": {
+            "description": "Erreur structurée ; voir docs/private-api.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Erreur structurée ; voir docs/private-api.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "Erreur structurée ; voir docs/private-api.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "Erreur structurée ; voir docs/private-api.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Erreur structurée ; voir docs/private-api.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Erreur structurée ; voir docs/private-api.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Erreur structurée ; voir docs/private-api.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/accounts/": {
+      "get": {
+        "operationId": "get__accounts_",
+        "summary": "Droit requis : read",
+        "security": [
+          {
+            "StudioBearer": []
+          },
+          {
+            "NativeOAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ressource ou mutation enregistrée ; ne prouve pas une publication distante.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "request_id": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "count": {
+                          "type": "integer"
+                        },
+                        "offset": {
+                          "type": "integer"
+                        },
+                        "limit": {
+                          "type": "integer"
+                        },
+                        "results": {
+                          "type": "array",
+                          "items": {
+                            "$ref": "#/components/schemas/Account"
+                          }
+                        }
+                      },
+                      "required": [
+                        "count",
+                        "results"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  "required": [
+                    "request_id",
+                    "data"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Erreur structurée ; voir docs/private-api.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Erreur structurée ; voir docs/private-api.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Erreur structurée ; voir docs/private-api.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Erreur structurée ; voir docs/private-api.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "405": {
+            "description": "Erreur structurée ; voir docs/private-api.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Erreur structurée ; voir docs/private-api.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "Erreur structurée ; voir docs/private-api.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "Erreur structurée ; voir docs/private-api.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Erreur structurée ; voir docs/private-api.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Erreur structurée ; voir docs/private-api.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Erreur structurée ; voir docs/private-api.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 100
+            }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 10000
+            }
+          }
+        ]
+      }
+    },
+    "/imports/": {
+      "post": {
+        "operationId": "post__imports_",
+        "summary": "Droit requis : import",
+        "security": [
+          {
+            "StudioBearer": []
+          },
+          {
+            "NativeOAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ressource ou mutation enregistrée ; ne prouve pas une publication distante.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "request_id": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/Operation"
+                    }
+                  },
+                  "required": [
+                    "request_id",
+                    "data"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "202": {
+            "description": "Ressource ou mutation enregistrée ; ne prouve pas une publication distante.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "request_id": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/Operation"
+                    }
+                  },
+                  "required": [
+                    "request_id",
+                    "data"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Erreur structurée ; voir docs/private-api.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Erreur structurée ; voir docs/private-api.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Erreur structurée ; voir docs/private-api.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Erreur structurée ; voir docs/private-api.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "405": {
+            "description": "Erreur structurée ; voir docs/private-api.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Erreur structurée ; voir docs/private-api.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "Erreur structurée ; voir docs/private-api.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "Erreur structurée ; voir docs/private-api.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Erreur structurée ; voir docs/private-api.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Erreur structurée ; voir docs/private-api.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Erreur structurée ; voir docs/private-api.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9_.:-]{1,160}$"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "file": {
+                    "type": "string",
+                    "format": "binary"
+                  },
+                  "manifest": {
+                    "type": "string",
+                    "contentMediaType": "application/json",
+                    "contentSchema": {
+                      "$ref": "#/components/schemas/Manifest"
+                    }
+                  }
+                },
+                "required": [
+                  "file",
+                  "manifest"
+                ],
+                "additionalProperties": false
+              }
+            }
+          }
+        }
+      }
+    },
+    "/imports/{id}/": {
+      "get": {
+        "operationId": "get__imports_id_",
+        "summary": "Droit requis : read",
+        "security": [
+          {
+            "StudioBearer": []
+          },
+          {
+            "NativeOAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ressource ou mutation enregistrée ; ne prouve pas une publication distante.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "request_id": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/Import"
+                    }
+                  },
+                  "required": [
+                    "request_id",
+                    "data"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Erreur structurée ; voir docs/private-api.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Erreur structurée ; voir docs/private-api.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Erreur structurée ; voir docs/private-api.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Erreur structurée ; voir docs/private-api.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "405": {
+            "description": "Erreur structurée ; voir docs/private-api.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Erreur structurée ; voir docs/private-api.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "Erreur structurée ; voir docs/private-api.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "Erreur structurée ; voir docs/private-api.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Erreur structurée ; voir docs/private-api.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Erreur structurée ; voir docs/private-api.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Erreur structurée ; voir docs/private-api.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ]
+      }
+    },
+    "/operations/": {
+      "get": {
+        "operationId": "get__operations_",
+        "summary": "Droit requis : read",
+        "security": [
+          {
+            "StudioBearer": []
+          },
+          {
+            "NativeOAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ressource ou mutation enregistrée ; ne prouve pas une publication distante.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "request_id": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/Operation"
+                    }
+                  },
+                  "required": [
+                    "request_id",
+                    "data"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Erreur structurée ; voir docs/private-api.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Erreur structurée ; voir docs/private-api.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Erreur structurée ; voir docs/private-api.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Erreur structurée ; voir docs/private-api.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "405": {
+            "description": "Erreur structurée ; voir docs/private-api.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Erreur structurée ; voir docs/private-api.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "Erreur structurée ; voir docs/private-api.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "Erreur structurée ; voir docs/private-api.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Erreur structurée ; voir docs/private-api.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Erreur structurée ; voir docs/private-api.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Erreur structurée ; voir docs/private-api.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "kind",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "enum": [
+                "import",
+                "batch",
+                "approve",
+                "replan"
+              ]
+            }
+          },
+          {
+            "name": "key",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ]
+      }
+    },
+    "/batches/": {
+      "post": {
+        "operationId": "post__batches_",
+        "summary": "Droit requis : draft",
+        "security": [
+          {
+            "StudioBearer": []
+          },
+          {
+            "NativeOAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ressource ou mutation enregistrée ; ne prouve pas une publication distante.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "request_id": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/Operation"
+                    }
+                  },
+                  "required": [
+                    "request_id",
+                    "data"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "201": {
+            "description": "Ressource ou mutation enregistrée ; ne prouve pas une publication distante.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "request_id": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/Operation"
+                    }
+                  },
+                  "required": [
+                    "request_id",
+                    "data"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Erreur structurée ; voir docs/private-api.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Erreur structurée ; voir docs/private-api.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Erreur structurée ; voir docs/private-api.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Erreur structurée ; voir docs/private-api.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "405": {
+            "description": "Erreur structurée ; voir docs/private-api.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Erreur structurée ; voir docs/private-api.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "Erreur structurée ; voir docs/private-api.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "Erreur structurée ; voir docs/private-api.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Erreur structurée ; voir docs/private-api.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Erreur structurée ; voir docs/private-api.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Erreur structurée ; voir docs/private-api.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9_.:-]{1,160}$"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "import_id": {
+                    "type": "string",
+                    "format": "uuid"
+                  },
+                  "destinations": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "additionalProperties": false,
+                      "required": [
+                        "account_id",
+                        "platform"
+                      ],
+                      "properties": {
+                        "account_id": {
+                          "type": "integer",
+                          "minimum": 1
+                        },
+                        "platform": {
+                          "enum": [
+                            "youtube",
+                            "instagram",
+                            "facebook",
+                            "tiktok"
+                          ]
+                        },
+                        "title": {
+                          "type": "string",
+                          "maxLength": 200
+                        },
+                        "description": {
+                          "type": "string",
+                          "maxLength": 50000
+                        },
+                        "parameters": {
+                          "type": "object",
+                          "additionalProperties": false,
+                          "properties": {
+                            "privacy": {
+                              "enum": [
+                                "private",
+                                "unlisted",
+                                "public"
+                              ]
+                            },
+                            "made_for_kids": {
+                              "type": "boolean"
+                            },
+                            "synthetic_media": {
+                              "type": "boolean"
+                            },
+                            "category_id": {
+                              "type": "string",
+                              "pattern": "^[0-9]{1,4}$"
+                            },
+                            "share_to_feed": {
+                              "type": "boolean"
+                            },
+                            "is_ai_generated": {
+                              "type": "boolean"
+                            }
+                          }
+                        },
+                        "scheduled_at": {
+                          "type": "string",
+                          "format": "date-time"
+                        }
+                      }
+                    },
+                    "maxItems": 50,
+                    "minItems": 0
+                  }
+                },
+                "required": [
+                  "import_id"
+                ],
+                "additionalProperties": false
+              }
+            }
+          }
+        }
+      }
+    },
+    "/batches/{id}/": {
+      "get": {
+        "operationId": "get__batches_id_",
+        "summary": "Droit requis : read",
+        "security": [
+          {
+            "StudioBearer": []
+          },
+          {
+            "NativeOAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ressource ou mutation enregistrée ; ne prouve pas une publication distante.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "request_id": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/Batch"
+                    }
+                  },
+                  "required": [
+                    "request_id",
+                    "data"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Erreur structurée ; voir docs/private-api.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Erreur structurée ; voir docs/private-api.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Erreur structurée ; voir docs/private-api.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Erreur structurée ; voir docs/private-api.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "405": {
+            "description": "Erreur structurée ; voir docs/private-api.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Erreur structurée ; voir docs/private-api.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "Erreur structurée ; voir docs/private-api.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "Erreur structurée ; voir docs/private-api.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Erreur structurée ; voir docs/private-api.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Erreur structurée ; voir docs/private-api.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Erreur structurée ; voir docs/private-api.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ]
+      }
+    },
+    "/batches/{id}/review/": {
+      "get": {
+        "operationId": "get__batches_id_review_",
+        "summary": "Droit requis : read",
+        "security": [
+          {
+            "StudioBearer": []
+          },
+          {
+            "NativeOAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ressource ou mutation enregistrée ; ne prouve pas une publication distante.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "request_id": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/Review"
+                    }
+                  },
+                  "required": [
+                    "request_id",
+                    "data"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Erreur structurée ; voir docs/private-api.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Erreur structurée ; voir docs/private-api.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Erreur structurée ; voir docs/private-api.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Erreur structurée ; voir docs/private-api.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "405": {
+            "description": "Erreur structurée ; voir docs/private-api.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Erreur structurée ; voir docs/private-api.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "Erreur structurée ; voir docs/private-api.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "Erreur structurée ; voir docs/private-api.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Erreur structurée ; voir docs/private-api.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Erreur structurée ; voir docs/private-api.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Erreur structurée ; voir docs/private-api.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ]
+      }
+    },
+    "/batches/{id}/approve/": {
+      "post": {
+        "operationId": "post__batches_id_approve_",
+        "summary": "Droit requis : approve",
+        "security": [
+          {
+            "StudioBearer": []
+          },
+          {
+            "NativeOAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ressource ou mutation enregistrée ; ne prouve pas une publication distante.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "request_id": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/Operation"
+                    }
+                  },
+                  "required": [
+                    "request_id",
+                    "data"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Erreur structurée ; voir docs/private-api.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Erreur structurée ; voir docs/private-api.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Erreur structurée ; voir docs/private-api.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Erreur structurée ; voir docs/private-api.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "405": {
+            "description": "Erreur structurée ; voir docs/private-api.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Erreur structurée ; voir docs/private-api.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "Erreur structurée ; voir docs/private-api.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "Erreur structurée ; voir docs/private-api.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Erreur structurée ; voir docs/private-api.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Erreur structurée ; voir docs/private-api.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Erreur structurée ; voir docs/private-api.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9_.:-]{1,160}$"
+            }
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "confirm": {
+                    "const": true
+                  },
+                  "review_token": {
+                    "type": "string"
+                  },
+                  "automatic": {
+                    "type": "boolean",
+                    "description": "true requires explicit rules on every destination account"
+                  }
+                },
+                "required": [
+                  "confirm",
+                  "review_token"
+                ],
+                "additionalProperties": false
+              }
+            }
+          }
+        },
+        "description": "Requires approve and integration.auto_approve. Atomic account-locked policy validation; HTTP 409 schedule_conflict never partially approves a group."
+      }
+    },
+    "/publications/{id}/": {
+      "get": {
+        "operationId": "get__publications_id_",
+        "summary": "Droit requis : read",
+        "security": [
+          {
+            "StudioBearer": []
+          },
+          {
+            "NativeOAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ressource ou mutation enregistrée ; ne prouve pas une publication distante.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "request_id": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/Publication"
+                    }
+                  },
+                  "required": [
+                    "request_id",
+                    "data"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Erreur structurée ; voir docs/private-api.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Erreur structurée ; voir docs/private-api.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Erreur structurée ; voir docs/private-api.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Erreur structurée ; voir docs/private-api.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "405": {
+            "description": "Erreur structurée ; voir docs/private-api.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Erreur structurée ; voir docs/private-api.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "Erreur structurée ; voir docs/private-api.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "Erreur structurée ; voir docs/private-api.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Erreur structurée ; voir docs/private-api.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Erreur structurée ; voir docs/private-api.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Erreur structurée ; voir docs/private-api.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ]
+      }
+    },
+    "/schedule/": {
+      "get": {
+        "operationId": "get__schedule_",
+        "summary": "Droit requis : read",
+        "security": [
+          {
+            "StudioBearer": []
+          },
+          {
+            "NativeOAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ressource ou mutation enregistrée ; ne prouve pas une publication distante.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "request_id": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/Schedule"
+                    }
+                  },
+                  "required": [
+                    "request_id",
+                    "data"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Erreur structurée ; voir docs/private-api.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Erreur structurée ; voir docs/private-api.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Erreur structurée ; voir docs/private-api.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Erreur structurée ; voir docs/private-api.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "405": {
+            "description": "Erreur structurée ; voir docs/private-api.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Erreur structurée ; voir docs/private-api.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "Erreur structurée ; voir docs/private-api.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "Erreur structurée ; voir docs/private-api.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Erreur structurée ; voir docs/private-api.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Erreur structurée ; voir docs/private-api.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Erreur structurée ; voir docs/private-api.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "from",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "until",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 100
+            }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 10000
+            }
+          }
+        ],
+        "description": "All authorized account occupations, regardless of creator; unresolved work may appear outside the horizon. Reading does not reserve a slot."
+      }
+    },
+    "/batches/{id}/replan/": {
+      "post": {
+        "operationId": "post_batch_replan",
+        "summary": "Droit requis : draft",
+        "security": [
+          {
+            "StudioBearer": []
+          },
+          {
+            "NativeOAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ressource ou mutation enregistrée ; ne prouve pas une publication distante.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "request_id": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/Operation"
+                    }
+                  },
+                  "required": [
+                    "request_id",
+                    "data"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Erreur structurée ; voir docs/private-api.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Erreur structurée ; voir docs/private-api.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Erreur structurée ; voir docs/private-api.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Erreur structurée ; voir docs/private-api.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "405": {
+            "description": "Erreur structurée ; voir docs/private-api.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Erreur structurée ; voir docs/private-api.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "Erreur structurée ; voir docs/private-api.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "Erreur structurée ; voir docs/private-api.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Erreur structurée ; voir docs/private-api.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Erreur structurée ; voir docs/private-api.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Erreur structurée ; voir docs/private-api.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9_.:-]{1,160}$"
+            }
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "review_token",
+                  "dates"
+                ],
+                "additionalProperties": false,
+                "properties": {
+                  "review_token": {
+                    "type": "string"
+                  },
+                  "dates": {
+                    "type": "array",
+                    "minItems": 1,
+                    "maxItems": 50,
+                    "items": {
+                      "type": "object",
+                      "required": [
+                        "account_id",
+                        "scheduled_at"
+                      ],
+                      "additionalProperties": false,
+                      "properties": {
+                        "account_id": {
+                          "type": "integer",
+                          "minimum": 1
+                        },
+                        "scheduled_at": {
+                          "type": "string",
+                          "format": "date-time"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "description": "Only own unengaged drafts; explicit future dates for every account; current signed review required. Does not reserve or approve."
+      }
+    },
+    "/publications/": {
+      "get": {
+        "operationId": "list_publications",
+        "summary": "Publications du studio ; scope=accounts exige read_history.",
+        "security": [
+          {
+            "StudioBearer": []
+          },
+          {
+            "NativeOAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ressource ou mutation enregistrée ; ne prouve pas une publication distante.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "request_id": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "required": [
+                        "count",
+                        "offset",
+                        "limit",
+                        "results",
+                        "next_offset",
+                        "truncated"
+                      ],
+                      "properties": {
+                        "count": {
+                          "type": "integer"
+                        },
+                        "offset": {
+                          "type": "integer"
+                        },
+                        "limit": {
+                          "type": "integer"
+                        },
+                        "results": {
+                          "type": "array",
+                          "items": {
+                            "$ref": "#/components/schemas/Publication"
+                          }
+                        },
+                        "next_offset": {
+                          "type": [
+                            "integer",
+                            "null"
+                          ]
+                        },
+                        "truncated": {
+                          "type": "boolean"
+                        }
+                      }
+                    }
+                  },
+                  "required": [
+                    "request_id",
+                    "data"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Erreur structurée ; voir docs/private-api.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Erreur structurée ; voir docs/private-api.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Erreur structurée ; voir docs/private-api.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Erreur structurée ; voir docs/private-api.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "405": {
+            "description": "Erreur structurée ; voir docs/private-api.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Erreur structurée ; voir docs/private-api.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "Erreur structurée ; voir docs/private-api.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "Erreur structurée ; voir docs/private-api.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Erreur structurée ; voir docs/private-api.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Erreur structurée ; voir docs/private-api.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Erreur structurée ; voir docs/private-api.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "scope",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "description": "own par défaut ; accounts pour les comptes autorisés, y compris interface et autres studios."
+          },
+          {
+            "name": "account_id",
+            "in": "query",
+            "schema": {
+              "type": "integer"
+            },
+            "description": "Compte autorisé."
+          },
+          {
+            "name": "state",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "description": "État de Publication.State."
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "schema": {
+              "type": "integer"
+            },
+            "description": "0–10000."
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "schema": {
+              "type": "integer"
+            },
+            "description": "1–100, défaut 50."
+          }
+        ]
+      }
+    },
+    "/publications/{id}/cancel/": {
+      "post": {
+        "operationId": "cancel_publication",
+        "summary": "Droit cancel ; uniquement publications propres au studio, non engagées à distance.",
+        "security": [
+          {
+            "StudioBearer": []
+          },
+          {
+            "NativeOAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ressource ou mutation enregistrée ; ne prouve pas une publication distante.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "request_id": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/Operation"
+                    }
+                  },
+                  "required": [
+                    "request_id",
+                    "data"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Erreur structurée ; voir docs/private-api.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Erreur structurée ; voir docs/private-api.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Erreur structurée ; voir docs/private-api.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Erreur structurée ; voir docs/private-api.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "405": {
+            "description": "Erreur structurée ; voir docs/private-api.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Erreur structurée ; voir docs/private-api.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "Erreur structurée ; voir docs/private-api.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "Erreur structurée ; voir docs/private-api.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Erreur structurée ; voir docs/private-api.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Erreur structurée ; voir docs/private-api.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Erreur structurée ; voir docs/private-api.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9_.:-]{1,160}$"
+            }
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "revision"
+                ],
+                "additionalProperties": false,
+                "properties": {
+                  "revision": {
+                    "type": "string",
+                    "pattern": "^[a-f0-9]{64}$"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "description": "Requires approve and integration.auto_approve. Atomic account-locked policy validation; HTTP 409 schedule_conflict never partially approves a group."
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "StudioBearer": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "opaque private integration credential"
+      },
+      "NativeOAuth": {
+        "type": "oauth2",
+        "description": "Client natif public studiorelay-cli. PKCE S256 obligatoire. Jamais de secret client distribué.",
+        "flows": {
+          "authorizationCode": {
+            "authorizationUrl": "https://studiorelay.fr/connector/authorize/",
+            "tokenUrl": "https://studiorelay.fr/connector/token/",
+            "scopes": {
+              "read": "read",
+              "import": "import",
+              "draft": "draft",
+              "approve": "approve",
+              "cancel": "cancel",
+              "read_history": "read_history"
+            }
+          }
+        }
+      }
+    },
+    "schemas": {
+      "Manifest": {
+        "title": "StudioRelay private import v2",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "schema_version",
+          "external_id",
+          "title"
+        ],
+        "properties": {
+          "schema_version": {
+            "const": 2
+          },
+          "external_id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 200
+          },
+          "brand": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100
+          },
+          "title": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 200
+          },
+          "destinations": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "account_id",
+                "platform"
+              ],
+              "properties": {
+                "account_id": {
+                  "type": "integer",
+                  "minimum": 1
+                },
+                "platform": {
+                  "enum": [
+                    "youtube",
+                    "instagram",
+                    "facebook",
+                    "tiktok"
+                  ]
+                },
+                "title": {
+                  "type": "string",
+                  "maxLength": 200
+                },
+                "description": {
+                  "type": "string",
+                  "maxLength": 50000
+                },
+                "parameters": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "privacy": {
+                      "enum": [
+                        "private",
+                        "unlisted",
+                        "public"
+                      ]
+                    },
+                    "made_for_kids": {
+                      "type": "boolean"
+                    },
+                    "synthetic_media": {
+                      "type": "boolean"
+                    },
+                    "category_id": {
+                      "type": "string",
+                      "pattern": "^[0-9]{1,4}$"
+                    },
+                    "share_to_feed": {
+                      "type": "boolean"
+                    },
+                    "is_ai_generated": {
+                      "type": "boolean"
+                    }
+                  }
+                },
+                "scheduled_at": {
+                  "type": "string",
+                  "format": "date-time"
+                }
+              }
+            },
+            "maxItems": 50,
+            "minItems": 0
+          }
+        }
+      },
+      "Account": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string"
+          },
+          "platform": {
+            "enum": [
+              "youtube",
+              "instagram",
+              "facebook",
+              "tiktok"
+            ]
+          },
+          "mode": {
+            "enum": [
+              "api",
+              "manual",
+              "simulation"
+            ]
+          },
+          "connected": {
+            "type": "boolean"
+          },
+          "archived": {
+            "type": "boolean"
+          },
+          "permissions": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "checked_at": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "platform",
+          "mode",
+          "connected",
+          "archived"
+        ],
+        "additionalProperties": false
+      },
+      "Publication": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "account_id": {
+            "type": "integer"
+          },
+          "platform": {
+            "type": "string"
+          },
+          "mode": {
+            "type": "string"
+          },
+          "state": {
+            "type": "string"
+          },
+          "outcome": {
+            "enum": [
+              "draft",
+              "approved_ready",
+              "schedule_recorded",
+              "transfer_in_progress",
+              "remote_processing",
+              "api_confirmed",
+              "manual_declaration",
+              "intervention_required",
+              "simulation",
+              "uncertain",
+              "failed",
+              "cancelled"
+            ]
+          },
+          "confirmation": {
+            "anyOf": [
+              {
+                "enum": [
+                  "api",
+                  "manual",
+                  "simulation"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "title": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "parameters": {
+            "type": "object"
+          },
+          "scheduled_at": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "remote_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "remote_url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "error": {
+            "type": "string"
+          },
+          "studio_url": {
+            "type": "string"
+          },
+          "revision": {
+            "type": "string",
+            "description": "Révision opaque requise pour annuler ; relire après conflit."
+          }
+        },
+        "required": [
+          "id",
+          "account_id",
+          "state",
+          "outcome",
+          "confirmation",
+          "revision"
+        ],
+        "additionalProperties": false
+      },
+      "Import": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "external_id": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "manifest": {
+            "$ref": "#/components/schemas/Manifest"
+          },
+          "asset_id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "status": {
+            "enum": [
+              "pending",
+              "converting",
+              "ready",
+              "failed"
+            ]
+          },
+          "ready": {
+            "type": "boolean"
+          },
+          "error": {
+            "type": "string"
+          },
+          "upload_sha256": {
+            "type": "string"
+          },
+          "final_sha256": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "metadata": {
+            "type": "object"
+          },
+          "status_url": {
+            "type": "string"
+          },
+          "studio_url": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "external_id",
+          "asset_id",
+          "status",
+          "ready",
+          "upload_sha256",
+          "final_sha256"
+        ],
+        "additionalProperties": false
+      },
+      "Batch": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "asset_id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "publications": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Publication"
+            }
+          },
+          "review_url": {
+            "type": "string"
+          },
+          "studio_url": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "publications"
+        ],
+        "additionalProperties": false
+      },
+      "Operation": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "kind": {
+            "enum": [
+              "import",
+              "batch",
+              "approve",
+              "replan",
+              "cancel"
+            ]
+          },
+          "key": {
+            "type": "string"
+          },
+          "request_digest": {
+            "type": "string"
+          },
+          "committed": {
+            "const": true
+          },
+          "import": {
+            "$ref": "#/components/schemas/Import"
+          },
+          "batch": {
+            "$ref": "#/components/schemas/Batch"
+          }
+        },
+        "required": [
+          "id",
+          "kind",
+          "key",
+          "committed"
+        ],
+        "additionalProperties": false
+      },
+      "Review": {
+        "type": "object",
+        "properties": {
+          "batch_id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "can_approve": {
+            "type": "boolean"
+          },
+          "revision": {
+            "type": "string"
+          },
+          "review_token": {
+            "type": "string",
+            "description": "Preuve signée, 1800 s, ne pas journaliser."
+          },
+          "expires_in_seconds": {
+            "const": 1800
+          },
+          "destinations": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "publication": {
+                  "$ref": "#/components/schemas/Publication"
+                },
+                "issues": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              },
+              "required": [
+                "publication",
+                "issues"
+              ],
+              "additionalProperties": false
+            }
+          }
+        },
+        "required": [
+          "batch_id",
+          "can_approve",
+          "revision",
+          "review_token",
+          "destinations",
+          "expires_in_seconds"
+        ],
+        "additionalProperties": false
+      },
+      "Error": {
+        "type": "object",
+        "properties": {
+          "request_id": {
+            "type": "string"
+          },
+          "error": {
+            "type": "object",
+            "properties": {
+              "code": {
+                "type": "string"
+              },
+              "message": {
+                "type": "string"
+              },
+              "details": {}
+            },
+            "required": [
+              "code",
+              "message"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "required": [
+          "request_id",
+          "error"
+        ],
+        "additionalProperties": false
+      },
+      "EditorialRules": {
+        "type": "object",
+        "required": [
+          "timezone",
+          "windows",
+          "max_per_day",
+          "min_spacing_minutes",
+          "slot_step_minutes"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "timezone": {
+            "type": "string",
+            "description": "IANA timezone"
+          },
+          "max_per_day": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 10000
+          },
+          "min_spacing_minutes": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 10080
+          },
+          "slot_step_minutes": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 60
+          },
+          "windows": {
+            "type": "array",
+            "minItems": 1,
+            "maxItems": 28,
+            "items": {
+              "type": "object",
+              "required": [
+                "weekdays",
+                "start",
+                "end"
+              ],
+              "additionalProperties": false,
+              "properties": {
+                "weekdays": {
+                  "type": "array",
+                  "uniqueItems": true,
+                  "minItems": 1,
+                  "maxItems": 7,
+                  "items": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 7
+                  }
+                },
+                "start": {
+                  "type": "string",
+                  "pattern": "^([01][0-9]|2[0-3]):[0-5][0-9]$"
+                },
+                "end": {
+                  "type": "string",
+                  "pattern": "^(([01][0-9]|2[0-3]):[0-5][0-9]|24:00)$"
+                }
+              }
+            }
+          }
+        }
+      },
+      "Occupation": {
+        "type": "object",
+        "required": [
+          "id",
+          "account_id",
+          "scheduled_at",
+          "effective_at",
+          "state",
+          "occupied",
+          "blocking",
+          "time_basis"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "account_id": {
+            "type": "integer"
+          },
+          "scheduled_at": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
+          },
+          "effective_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "state": {
+            "type": "string"
+          },
+          "occupied": {
+            "type": "boolean"
+          },
+          "blocking": {
+            "type": "boolean"
+          },
+          "time_basis": {
+            "enum": [
+              "scheduled_at",
+              "started_at",
+              "approved_at",
+              "created_at"
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "Schedule": {
+        "type": "object",
+        "required": [
+          "accounts",
+          "count",
+          "offset",
+          "limit",
+          "results",
+          "next_offset",
+          "truncated"
+        ],
+        "properties": {
+          "accounts": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "account_id",
+                "editorial_rules"
+              ],
+              "properties": {
+                "account_id": {
+                  "type": "integer"
+                },
+                "editorial_rules": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/EditorialRules"
+                    },
+                    {
+                      "type": "object",
+                      "maxProperties": 0
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "count": {
+            "type": "integer"
+          },
+          "offset": {
+            "type": "integer"
+          },
+          "limit": {
+            "type": "integer"
+          },
+          "results": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Occupation"
+            }
+          },
+          "next_offset": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "truncated": {
+            "type": "boolean"
+          }
+        }
+      },
+      "Identity": {
+        "type": "object",
+        "required": [
+          "integration_id",
+          "name",
+          "brand",
+          "permissions",
+          "auto_approve",
+          "enforce_editorial_rules",
+          "limits",
+          "capabilities"
+        ],
+        "properties": {
+          "integration_id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string"
+          },
+          "brand": {
+            "type": "object",
+            "required": [
+              "id",
+              "slug"
+            ],
+            "properties": {
+              "id": {
+                "type": "integer"
+              },
+              "slug": {
+                "type": "string"
+              }
+            }
+          },
+          "permissions": {
+            "type": "array",
+            "items": {
+              "enum": [
+                "read",
+                "import",
+                "draft",
+                "approve",
+                "read_history",
+                "cancel"
+              ]
+            }
+          },
+          "auto_approve": {
+            "type": "boolean"
+          },
+          "enforce_editorial_rules": {
+            "type": "boolean"
+          },
+          "limits": {
+            "type": "object",
+            "required": [
+              "upload_bytes",
+              "uploads_per_hour",
+              "requests_per_minute"
+            ],
+            "properties": {
+              "upload_bytes": {
+                "type": "integer"
+              },
+              "uploads_per_hour": {
+                "type": "integer"
+              },
+              "requests_per_minute": {
+                "type": "integer"
+              }
+            }
+          },
+          "capabilities": {
+            "type": "object",
+            "additionalProperties": {
+              "type": [
+                "string",
+                "boolean"
+              ]
+            }
+          }
+        }
+      }
+    }
+  }
+}

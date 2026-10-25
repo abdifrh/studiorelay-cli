@@ -1,0 +1,63 @@
+{
+  "name": "@studiorelay/cli",
+  "version": "0.1.0",
+  "description": "Local StudioRelay CLI and MCP connector for Claude Code",
+  "type": "module",
+  "license": "MIT",
+  "engines": {
+    "node": ">=22.16.0"
+  },
+  "bin": {
+    "studiorelay": "dist/cli.js"
+  },
+  "files": [
+    "dist",
+    "skill",
+    "contracts",
+    "README.md",
+    "LICENSE",
+    "CHANGELOG.md"
+  ],
+  "scripts": {
+    "build": "tsc && node scripts/copy-contracts.mjs",
+    "test": "npm run build && node --test test/*.test.mjs",
+    "contracts": "openapi-typescript contracts/openapi.json -o src/contracts.d.ts",
+    "prepack": "npm run build",
+    "check:package": "node scripts/check-package.mjs"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/server": "2.4.0",
+    "@napi-rs/keyring": "2.1.2",
+    "cross-spawn": "7.0.6",
+    "zod": "4.6.7"
+  },
+  "devDependencies": {
+    "@modelcontextprotocol/client": "2.4.0",
+    "@types/cross-spawn": "^6.0.6",
+    "@types/node": "^22.0.0",
+    "openapi-typescript": "7.13.0",
+    "typescript": "5.9.3"
+  },
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/client.d.ts",
+      "import": "./dist/client.js"
+    },
+    "./mcp": {
+      "types": "./dist/mcp.d.ts",
+      "import": "./dist/mcp.js"
+    }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/abdifrh/studiorelay-cli.git"
+  },
+  "homepage": "https://github.com/abdifrh/studiorelay-cli#readme",
+  "bugs": {
+    "url": "https://github.com/abdifrh/studiorelay-cli/issues"
+  }
+}
