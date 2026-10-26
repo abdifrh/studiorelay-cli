@@ -4,7 +4,7 @@
 
 Connect your production studio to [StudioRelay](https://studiorelay.fr) to prepare, upload and schedule videos using Claude Code or Codex. One CLI, a local stdio MCP server and a Skill for each assistant reuse the existing StudioRelay API.
 
-**Version: 0.2.0 · MIT license · Windows, macOS and Linux.** The package is available on [npm](https://www.npmjs.com/package/@studiorelay/cli). The private backend and social platform credentials are not distributed.
+**Source version: 0.2.1 · MIT license · Windows, macOS and Linux.** The package is available on [npm](https://www.npmjs.com/package/@studiorelay/cli). The private backend and social platform credentials are not distributed.
 
 ## Contents
 
@@ -41,7 +41,7 @@ npm ci --ignore-scripts
 npm test
 npm run check:package
 npm pack
-npm install -g ./studiorelay-cli-0.2.0.tgz
+npm install -g ./studiorelay-cli-0.2.1.tgz
 ```
 
 </details>
@@ -55,7 +55,7 @@ studiorelay init --server https://studiorelay.fr --media-root "ABSOLUTE_STUDIO_P
 studiorelay login
 ```
 
-The browser asks you to select a brand, explicit accounts, actions and limits. **You do not need to generate an API key manually.** Complete authorization within five minutes and leave the terminal open. Social accounts added later are not automatically included in this consent.
+The browser asks you to select a brand, explicit accounts, actions and limits. **You do not need to generate an API key manually.** In an interactive terminal, press **ENTER** to open the default browser. The five-minute window starts after confirmation; leave the terminal open. Without an interactive terminal, the link is printed for manual opening. Social accounts added later are not automatically included in this consent.
 
 Install your chosen assistant, or both:
 
@@ -189,6 +189,8 @@ python manage.py configure_claude_connector
 
 ## Update and uninstall
 
+Starting with 0.2.1 (once published on npm), interactive commands check for updates at most once every 24 hours and print an update command to stderr. Nothing is installed automatically. MCP, noninteractive scripts and CI skip this check. Registry failures are silent; requests time out after 1.5 seconds. The `update-check.json` cache contains only a check timestamp and a public version. Set `STUDIORELAY_NO_UPDATE_CHECK=1` to disable detection. `update --check` remains an explicit check.
+
 To install the latest published version:
 
 ```sh
@@ -204,7 +206,7 @@ git pull origin main
 npm ci --ignore-scripts
 npm test
 npm pack
-npm install -g ./studiorelay-cli-0.2.0.tgz
+npm install -g ./studiorelay-cli-0.2.1.tgz
 studiorelay --version
 ```
 

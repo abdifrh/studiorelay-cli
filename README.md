@@ -4,7 +4,7 @@
 
 Connectez votre studio de création à [StudioRelay](https://studiorelay.fr) pour préparer, importer et programmer vos vidéos avec Claude Code ou Codex. Un seul CLI, un serveur MCP local et un Skill par assistant réutilisent l’API StudioRelay existante.
 
-**Version : 0.2.0 · Licence MIT · Windows, macOS et Linux.** Le package est disponible sur [npm](https://www.npmjs.com/package/@studiorelay/cli). Le backend privé et les secrets des réseaux sociaux ne sont pas distribués.
+**Version des sources : 0.2.1 · Licence MIT · Windows, macOS et Linux.** Le package est disponible sur [npm](https://www.npmjs.com/package/@studiorelay/cli). Le backend privé et les secrets des réseaux sociaux ne sont pas distribués.
 
 ## Sommaire
 
@@ -41,7 +41,7 @@ npm ci --ignore-scripts
 npm test
 npm run check:package
 npm pack
-npm install -g ./studiorelay-cli-0.2.0.tgz
+npm install -g ./studiorelay-cli-0.2.1.tgz
 ```
 
 </details>
@@ -55,7 +55,7 @@ studiorelay init --server https://studiorelay.fr --media-root "CHEMIN_ABSOLU_DU_
 studiorelay login
 ```
 
-Le navigateur demande la marque, les comptes, les actions et les limites autorisés. **Aucune clé n’est à générer manuellement.** Terminez l’autorisation en moins de cinq minutes et gardez le terminal ouvert. Les nouveaux comptes sociaux ne sont pas ajoutés automatiquement au consentement.
+Le navigateur demande la marque, les comptes, les actions et les limites autorisés. **Aucune clé n’est à générer manuellement.** En terminal interactif, appuyez sur **ENTRÉE** pour ouvrir le navigateur par défaut. Le délai de cinq minutes commence après cette confirmation ; gardez le terminal ouvert. Sans terminal interactif, le lien est affiché pour une ouverture manuelle. Les nouveaux comptes sociaux ne sont pas ajoutés automatiquement au consentement.
 
 Installez ensuite l’assistant souhaité, ou les deux :
 
@@ -189,6 +189,8 @@ python manage.py configure_claude_connector
 
 ## Mise à jour et désinstallation
 
+À partir de 0.2.1 (après sa publication npm), les commandes interactives vérifient automatiquement les nouveautés au maximum une fois par 24 heures et affichent une commande de mise à jour sur stderr. Aucune installation automatique : votre accord reste nécessaire. Le MCP, les scripts sans terminal interactif et la CI ne font pas cette vérification. Une panne du registre reste silencieuse ; la requête est limitée à 1,5 seconde. Le cache `update-check.json` ne contient que la date du contrôle et une version publique. `STUDIORELAY_NO_UPDATE_CHECK=1` désactive cette détection. `update --check` reste une vérification explicite.
+
 Pour installer la dernière version publiée :
 
 ```sh
@@ -204,7 +206,7 @@ git pull origin main
 npm ci --ignore-scripts
 npm test
 npm pack
-npm install -g ./studiorelay-cli-0.2.0.tgz
+npm install -g ./studiorelay-cli-0.2.1.tgz
 studiorelay --version
 ```
 

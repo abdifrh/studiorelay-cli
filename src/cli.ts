@@ -10,6 +10,7 @@ import {installClaude,uninstallClaude} from './claude.js';
 import {installCodex,uninstallCodex} from './codex.js';
 import {runMcp} from './mcp.js';
 import {VERSION} from './version.js';
+import {automaticUpdateNotice,latestVersion,newer} from './updates.js';
 const output=(value:unknown)=>console.log(JSON.stringify(value,null,2));
 async function main(){
  const {positionals,values:options}=parseArgs({allowPositionals:true,options:{
@@ -19,10 +20,13 @@ async function main(){
   check:{type:'boolean'},help:{type:'boolean'},version:{type:'boolean'}
  }});
  const [command='help',subcommand]=positionals;
+ if(command!=='mcp'&&command!=='update'&&process.stderr.isTTY&&process.stdin.isTTY&&!process.env.CI&&process.env.STUDIORELAY_NO_UPDATE_CHECK!=='1'){
+  const notice=await automaticUpdateNotice();if(notice)console.error(notice);
+ }
  if(command==='version'||options.version){output({version:VERSION});return;}
  if(command==='help'||options.help){console.log('StudioRelay '+VERSION+'\ninit --server https://studiorelay.fr --media-root DOSSIER\nlogin [--no-browser | --token-stdin]\nclaude install | claude uninstall\ncodex install | codex uninstall\ndoctor | accounts | schedule --from ISO --until ISO\npublish MANIFESTE.json [--auto-schedule --from ISO --until ISO] [--approve]\nmcp | logout | update --check');return;}
  if(command==='init'){const config=await saveConfig(options.server||'https://studiorelay.fr',options['media-root']||process.cwd(),options.profile||'default');output({initialized:true,...config});return;}
- if(command==='update'){const response=await fetch('https://registry.npmjs.org/@studiorelay%2fcli/latest',{redirect:'error',signal:AbortSignal.timeout(15000)});if(!response.ok)throw new Error('Package non encore publié ou registre indisponible.');const value=await response.json() as {version:string};if(!/^[0-9]+\.[0-9]+\.[0-9]+$/.test(value.version))throw new Error('Version du registre invalide.');output({installed:VERSION,latest:value.version,command:'npm install -g @studiorelay/cli@'+value.version});return;}
+ if(command==='update'){const latest=await latestVersion(fetch,15000);output({installed:VERSION,latest,updateAvailable:newer(latest),command:'npm install -g @studiorelay/cli@'+latest});return;}
  const config=await loadConfig(),store=new KeychainStore(config),client=new StudioRelayClient(config,store);
  if(command==='login'){
   if(options['token-stdin']){if(process.stdin.isTTY)throw new Error('Fournissez le jeton par un pipe local, jamais en argument ni dans un prompt.');let raw='';for await(const chunk of process.stdin){raw+=chunk;if(raw.length>256)throw new Error('Jeton invalide.');}raw=raw.trim();if(!/^sr1_[a-f0-9]{32}_[A-Za-z0-9_-]{43}$/.test(raw))throw new Error('Format de jeton privé invalide.');await withCredentialLock(()=>store.set({kind:'legacy',token:raw}));}

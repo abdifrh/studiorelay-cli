@@ -1,6 +1,6 @@
 import {createServer} from 'node:http';
 import {randomBytes,createHash,timingSafeEqual} from 'node:crypto';
-import spawn from 'cross-spawn';
+import {openLoginBrowser,waitForEnter} from './browser.js';
 import {oauthRequest,withCredentialLock,type CredentialStore} from './credentials.js';
 import type {Config} from './config.js';
 export async function checkConnector(server:string){
@@ -10,6 +10,8 @@ export async function checkConnector(server:string){
  if(!response.ok||status.ready!==true)throw new Error(status.code==='client_missing'?'Le client OAuth studiorelay-cli doit être enregistré sur le serveur : configure_claude_connector.':'Le connecteur StudioRelay attend son activation serveur. Consultez la section Studios & assistants du dashboard.');
 }
 export async function login(config:Config,store:CredentialStore,openBrowser=true){
+ const interactive=Boolean(process.stdin.isTTY&&process.stderr.isTTY);
+ if(openBrowser&&interactive)await waitForEnter();
  await checkConnector(config.server);
  const verifier=randomBytes(48).toString('base64url'),state=randomBytes(32).toString('base64url');
  let receive!:(value:string)=>void,reject!:(error:Error)=>void;
@@ -34,7 +36,7 @@ export async function login(config:Config,store:CredentialStore,openBrowser=true
  const url=new URL('/connector/authorize/',config.server);url.search=new URLSearchParams({client_id:'studiorelay-cli',response_type:'code',redirect_uri:redirect,scope:'read import draft approve cancel read_history',state,code_challenge:createHash('sha256').update(verifier).digest('base64url'),code_challenge_method:'S256'}).toString();
  const timeout=setTimeout(()=>reject(new Error('Connexion expirée après cinq minutes.')),300000);
  console.error('Autorisez la connexion dans votre navigateur : '+url.href);
- if(openBrowser){const command=process.platform==='win32'?'explorer.exe':process.platform==='darwin'?'open':'xdg-open';const child=spawn(command,[url.href],{stdio:'ignore',detached:true});child.on('error',()=>console.error('Ouvrez manuellement le lien de connexion ci-dessus.'));child.unref();}
+ if(openBrowser&&interactive)openLoginBrowser(url.href);
  try{const received=await code;await withCredentialLock(async()=>{const next=await oauthRequest(config.server,'/connector/token/',{client_id:'studiorelay-cli',grant_type:'authorization_code',redirect_uri:redirect,code:received,code_verifier:verifier});if(!next)throw new Error('Réponse OAuth absente.');await store.set(next);});}
  finally{clearTimeout(timeout);server.closeAllConnections();server.close();}
 }

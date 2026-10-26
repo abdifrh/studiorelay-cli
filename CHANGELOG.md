@@ -1,5 +1,11 @@
 # Historique · Changelog
 
+## 0.2.1 — prochaine publication / pending npm publication
+
+**Français :** détection des nouvelles versions en terminal interactif, cache 24 h, délai réseau court, désactivation possible ; aucune mise à jour automatique et aucun contrôle réseau dans le MCP. Connexion par appui sur Entrée, ouverture du navigateur par défaut sous Windows sans Explorer, délai OAuth démarrant après confirmation.
+
+**English:** interactive update notifications with a 24-hour cache, short network timeout and opt-out; no automatic installation or update checks in MCP. Press Enter before login, open the default Windows browser without Explorer, and start the OAuth timeout after confirmation.
+
 ## 0.2.0
 
 ### Français
