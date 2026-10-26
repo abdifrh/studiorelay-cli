@@ -4,7 +4,7 @@
 
 Connect your production studio to [StudioRelay](https://studiorelay.fr) to prepare, upload and schedule videos using Claude Code or Codex. One CLI, a local stdio MCP server and a Skill for each assistant reuse the existing StudioRelay API.
 
-**Version: 0.2.0 · MIT license · Windows, macOS and Linux.** The package is not yet published on npm: build and install it from this repository. The private backend and social platform credentials are not distributed.
+**Version: 0.2.0 · MIT license · Windows, macOS and Linux.** The package is available on [npm](https://www.npmjs.com/package/@studiorelay/cli). The private backend and social platform credentials are not distributed.
 
 ## Contents
 
@@ -26,6 +26,15 @@ Requirements: **Node.js 22.16 or newer**, Git, Claude Code or Codex available in
 Credentials use Windows Credential Manager, macOS Keychain or an unlocked Linux Secret Service session. Headless Linux without this service cannot persist a login. There is no plaintext fallback.
 
 ```sh
+npm install -g @studiorelay/cli
+studiorelay --version
+```
+
+For contributors or installation from source:
+
+<details><summary>Build an archive from GitHub</summary>
+
+```sh
 git clone https://github.com/abdifrh/studiorelay-cli.git
 cd studiorelay-cli
 npm ci --ignore-scripts
@@ -33,8 +42,9 @@ npm test
 npm run check:package
 npm pack
 npm install -g ./studiorelay-cli-0.2.0.tgz
-studiorelay --version
 ```
+
+</details>
 
 ## Connect and choose an assistant
 
@@ -101,7 +111,7 @@ studiorelay publish manifest.json --auto-schedule --from 2027-01-01T00:00:00+01:
 studiorelay update --check
 ```
 
-Without `--approve`, `publish` creates drafts and returns technical review. The CLI can propose dates with the shared planner; the server remains authoritative. `update --check` queries npm and can report that the package is unavailable until it has been published.
+Without `--approve`, `publish` creates drafts and returns technical review. The CLI can propose dates with the shared planner; the server remains authoritative. `update --check` queries npm and compares the installed version with the latest published version.
 
 | MCP purpose | Tools |
 | --- | --- |
@@ -158,7 +168,7 @@ Keep stable idempotency keys per render and mutation. The local operation journa
 
 | Symptom | Action |
 | --- | --- |
-| Unknown `codex install` command | Check `studiorelay --version`: Codex requires at least 0.2.0. Update the globally installed archive. |
+| Unknown `codex install` command | Check `studiorelay --version`: Codex requires at least 0.2.0. Run `npm install -g @studiorelay/cli@latest`. |
 | `ERR_CONNECTION_REFUSED` at `127.0.0.1` | The CLI may have timed out after five minutes or stopped. Run `login` again, keep the terminal open and use the new link. |
 | Diagnostic `disabled` | An administrator must enable the connector after assigning brand memberships. |
 | Diagnostic `client_missing` | An administrator must register or verify the public OAuth client. |
@@ -179,7 +189,15 @@ python manage.py configure_claude_connector
 
 ## Update and uninstall
 
-From the public repository clone:
+To install the latest published version:
+
+```sh
+studiorelay update --check
+npm install -g @studiorelay/cli@latest
+studiorelay --version
+```
+
+To rebuild from the public repository clone:
 
 ```sh
 git pull origin main

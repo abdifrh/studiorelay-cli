@@ -22,4 +22,4 @@
 
 **English:** initial connector: OAuth PKCE, OS keychain, stdio MCP, local media uploads, technical review, bounded planning recovery, session revocation and Claude Code Skill.
 
-Le package n’est pas encore publié sur npm. / The package is not yet published on npm.
+Le package est disponible sur [npm](https://www.npmjs.com/package/@studiorelay/cli). / The package is available on npm.

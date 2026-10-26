@@ -4,7 +4,7 @@
 
 Connectez votre studio de création à [StudioRelay](https://studiorelay.fr) pour préparer, importer et programmer vos vidéos avec Claude Code ou Codex. Un seul CLI, un serveur MCP local et un Skill par assistant réutilisent l’API StudioRelay existante.
 
-**Version : 0.2.0 · Licence MIT · Windows, macOS et Linux.** Le package n’est pas encore publié sur npm : installez-le depuis ce dépôt avec les commandes ci-dessous. Le backend privé et les secrets des réseaux sociaux ne sont pas distribués.
+**Version : 0.2.0 · Licence MIT · Windows, macOS et Linux.** Le package est disponible sur [npm](https://www.npmjs.com/package/@studiorelay/cli). Le backend privé et les secrets des réseaux sociaux ne sont pas distribués.
 
 ## Sommaire
 
@@ -26,6 +26,15 @@ Prérequis : **Node.js 22.16 minimum**, Git, Claude Code ou Codex accessible dan
 Les identifiants sont conservés dans le Gestionnaire d’informations d’identification Windows, le Trousseau macOS ou un service Secret Service déverrouillé sous Linux. Une session Linux sans ce service ne peut pas conserver la connexion ; aucun stockage en clair n’est utilisé.
 
 ```sh
+npm install -g @studiorelay/cli
+studiorelay --version
+```
+
+Pour les contributeurs ou une installation depuis les sources :
+
+<details><summary>Construire une archive depuis GitHub</summary>
+
+```sh
 git clone https://github.com/abdifrh/studiorelay-cli.git
 cd studiorelay-cli
 npm ci --ignore-scripts
@@ -33,8 +42,9 @@ npm test
 npm run check:package
 npm pack
 npm install -g ./studiorelay-cli-0.2.0.tgz
-studiorelay --version
 ```
+
+</details>
 
 ## Connexion et choix de l’assistant
 
@@ -101,7 +111,7 @@ studiorelay publish manifest.json --auto-schedule --from 2027-01-01T00:00:00+01:
 studiorelay update --check
 ```
 
-Sans `--approve`, `publish` crée des brouillons et renvoie la relecture technique. Le CLI peut proposer les dates avec le planificateur partagé ; le serveur garde la décision finale. `update --check` consulte npm et peut signaler l’absence de package tant qu’il n’est pas publié.
+Sans `--approve`, `publish` crée des brouillons et renvoie la relecture technique. Le CLI peut proposer les dates avec le planificateur partagé ; le serveur garde la décision finale. `update --check` consulte npm et compare la version installée à la dernière version publiée.
 
 | Usage MCP | Outils |
 | --- | --- |
@@ -158,7 +168,7 @@ Conservez des clés d’idempotence stables par rendu et par mutation. Le journa
 
 | Symptôme | Action |
 | --- | --- |
-| `codex install` inconnu | Vérifiez `studiorelay --version` : Codex demande au moins 0.2.0. Mettez à jour l’archive installée globalement. |
+| `codex install` inconnu | Vérifiez `studiorelay --version` : Codex demande au moins 0.2.0. Exécutez `npm install -g @studiorelay/cli@latest`. |
 | `ERR_CONNECTION_REFUSED` sur `127.0.0.1` | Le CLI a pu expirer après cinq minutes ou s’arrêter. Relancez `login`, gardez le terminal ouvert et utilisez le nouveau lien. |
 | Diagnostic `disabled` | L’administrateur doit activer le connecteur après attribution des accès aux marques. |
 | Diagnostic `client_missing` | L’administrateur doit enregistrer ou vérifier le client OAuth public. |
@@ -179,7 +189,15 @@ python manage.py configure_claude_connector
 
 ## Mise à jour et désinstallation
 
-Depuis le clone du dépôt public :
+Pour installer la dernière version publiée :
+
+```sh
+studiorelay update --check
+npm install -g @studiorelay/cli@latest
+studiorelay --version
+```
+
+Pour reconstruire depuis le clone du dépôt public :
 
 ```sh
 git pull origin main
