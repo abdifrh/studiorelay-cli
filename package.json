@@ -1,7 +1,7 @@
 {
   "name": "@studiorelay/cli",
-  "version": "0.1.0",
-  "description": "Local StudioRelay CLI and MCP connector for Claude Code",
+  "version": "0.2.0",
+  "description": "Local StudioRelay CLI and MCP connector for Claude Code and Codex",
   "type": "module",
   "license": "MIT",
   "engines": {

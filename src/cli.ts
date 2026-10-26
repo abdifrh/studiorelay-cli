@@ -7,6 +7,7 @@ import {KeychainStore,withCredentialLock} from './credentials.js';
 import {login,logout} from './login.js';
 import {StudioRelayClient,hash,type Manifest,type Operation} from './client.js';
 import {installClaude,uninstallClaude} from './claude.js';
+import {installCodex,uninstallCodex} from './codex.js';
 import {runMcp} from './mcp.js';
 import {VERSION} from './version.js';
 const output=(value:unknown)=>console.log(JSON.stringify(value,null,2));
@@ -19,7 +20,7 @@ async function main(){
  }});
  const [command='help',subcommand]=positionals;
  if(command==='version'||options.version){output({version:VERSION});return;}
- if(command==='help'||options.help){console.log('StudioRelay '+VERSION+'\ninit --server https://studiorelay.fr --media-root DOSSIER\nlogin [--no-browser | --token-stdin]\nclaude install | claude uninstall\ndoctor | accounts | schedule --from ISO --until ISO\npublish MANIFESTE.json [--auto-schedule --from ISO --until ISO] [--approve]\nmcp | logout | update --check');return;}
+ if(command==='help'||options.help){console.log('StudioRelay '+VERSION+'\ninit --server https://studiorelay.fr --media-root DOSSIER\nlogin [--no-browser | --token-stdin]\nclaude install | claude uninstall\ncodex install | codex uninstall\ndoctor | accounts | schedule --from ISO --until ISO\npublish MANIFESTE.json [--auto-schedule --from ISO --until ISO] [--approve]\nmcp | logout | update --check');return;}
  if(command==='init'){const config=await saveConfig(options.server||'https://studiorelay.fr',options['media-root']||process.cwd(),options.profile||'default');output({initialized:true,...config});return;}
  if(command==='update'){const response=await fetch('https://registry.npmjs.org/@studiorelay%2fcli/latest',{redirect:'error',signal:AbortSignal.timeout(15000)});if(!response.ok)throw new Error('Package non encore publié ou registre indisponible.');const value=await response.json() as {version:string};if(!/^[0-9]+\.[0-9]+\.[0-9]+$/.test(value.version))throw new Error('Version du registre invalide.');output({installed:VERSION,latest:value.version,command:'npm install -g @studiorelay/cli@'+value.version});return;}
  const config=await loadConfig(),store=new KeychainStore(config),client=new StudioRelayClient(config,store);
@@ -30,6 +31,7 @@ async function main(){
  }
  if(command==='logout'){output(await logout(config,store));return;}
  if(command==='claude'){output(subcommand==='install'?await installClaude():subcommand==='uninstall'?await uninstallClaude():(()=>{throw new Error('Choisir claude install ou claude uninstall.');})());return;}
+ if(command==='codex'){output(subcommand==='install'?await installCodex():subcommand==='uninstall'?await uninstallCodex():(()=>{throw new Error('Choisir codex install ou codex uninstall.');})());return;}
  if(command==='doctor'){const me=await client.identity();output({connected:true,version:VERSION,server:config.server,mediaRoot:config.mediaRoot,identity:me});return;}
  if(command==='accounts'){output(await client.accounts());return;}
  if(command==='schedule'){if(!options.from||!options.until)throw new Error('--from et --until requis.');output(await client.schedule(options.from,options.until));return;}

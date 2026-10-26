@@ -3,7 +3,14 @@ import {randomBytes,createHash,timingSafeEqual} from 'node:crypto';
 import spawn from 'cross-spawn';
 import {oauthRequest,withCredentialLock,type CredentialStore} from './credentials.js';
 import type {Config} from './config.js';
+export async function checkConnector(server:string){
+ const response=await fetch(new URL('/connector/status/',server),{redirect:'error',signal:AbortSignal.timeout(15000)});
+ if(response.status===404)throw new Error('Le serveur StudioRelay ne propose pas encore le connecteur. Mettez le serveur à jour et activez-le avant de relancer login.');
+ let status:{ready?:boolean;code?:string};try{status=await response.json() as typeof status;}catch{throw new Error('Diagnostic du connecteur indisponible. Vérifiez le domaine et le déploiement StudioRelay.');}
+ if(!response.ok||status.ready!==true)throw new Error(status.code==='client_missing'?'Le client OAuth studiorelay-cli doit être enregistré sur le serveur : configure_claude_connector.':'Le connecteur StudioRelay attend son activation serveur. Consultez la section Studios & assistants du dashboard.');
+}
 export async function login(config:Config,store:CredentialStore,openBrowser=true){
+ await checkConnector(config.server);
  const verifier=randomBytes(48).toString('base64url'),state=randomBytes(32).toString('base64url');
  let receive!:(value:string)=>void,reject!:(error:Error)=>void;
  let boundHost='';
