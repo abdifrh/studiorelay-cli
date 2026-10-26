@@ -2,41 +2,46 @@
 import {parseArgs} from 'node:util';
 import {readFile} from 'node:fs/promises';
 import {resolve} from 'node:path';
-import {loadConfig,saveConfig} from './config.js';
-import {KeychainStore,withCredentialLock} from './credentials.js';
+import {loadConfig,saveConfig,saveStudioConfig,bindStudio} from './config.js';
+import {KeychainStore,withCredentialLock,type Credentials} from './credentials.js';
 import {login,logout} from './login.js';
 import {StudioRelayClient,hash,type Manifest,type Operation} from './client.js';
 import {installClaude,uninstallClaude} from './claude.js';
 import {installCodex,uninstallCodex} from './codex.js';
 import {runMcp} from './mcp.js';
+import {projectHost} from './project-host.js';
 import {VERSION} from './version.js';
 import {automaticUpdateNotice,latestVersion,newer} from './updates.js';
 const output=(value:unknown)=>console.log(JSON.stringify(value,null,2));
 async function main(){
  const {positionals,values:options}=parseArgs({allowPositionals:true,options:{
-  server:{type:'string'},'media-root':{type:'string'},profile:{type:'string'},
+  server:{type:'string'},'media-root':{type:'string'},profile:{type:'string'},studio:{type:'string'},'expect-brand':{type:'string'},global:{type:'boolean'},
   'no-browser':{type:'boolean'},'token-stdin':{type:'boolean'},approve:{type:'boolean'},
   'auto-schedule':{type:'boolean'},from:{type:'string'},until:{type:'string'},
   check:{type:'boolean'},help:{type:'boolean'},version:{type:'boolean'}
  }});
  const [command='help',subcommand]=positionals;
+ if(options.global&&options.studio)throw new Error('--global et --studio sont incompatibles.');
  if(command!=='mcp'&&command!=='update'&&process.stderr.isTTY&&process.stdin.isTTY&&!process.env.CI&&process.env.STUDIORELAY_NO_UPDATE_CHECK!=='1'){
   const notice=await automaticUpdateNotice();if(notice)console.error(notice);
  }
  if(command==='version'||options.version){output({version:VERSION});return;}
- if(command==='help'||options.help){console.log('StudioRelay '+VERSION+'\ninit --server https://studiorelay.fr --media-root DOSSIER\nlogin [--no-browser | --token-stdin]\nclaude install | claude uninstall\ncodex install | codex uninstall\ndoctor | accounts | schedule --from ISO --until ISO\npublish MANIFESTE.json [--auto-schedule --from ISO --until ISO] [--approve]\nmcp | logout | update --check');return;}
- if(command==='init'){const config=await saveConfig(options.server||'https://studiorelay.fr',options['media-root']||process.cwd(),options.profile||'default');output({initialized:true,...config});return;}
+ if(command==='help'||options.help){console.log('StudioRelay '+VERSION+'\ninit --server https://studiorelay.fr --media-root DOSSIER [--profile NOM --expect-brand SLUG] [--global]\nlogin [--no-browser | --token-stdin]\nclaude install | claude uninstall\ncodex install | codex uninstall\nbind | doctor | accounts | schedule --from ISO --until ISO\npublish MANIFESTE.json [--auto-schedule --from ISO --until ISO] [--approve]\nmcp | logout | update --check');return;}
+ if(command!=='init'&&(options.profile||options.server||options['media-root']||options['expect-brand']))throw new Error('Ces options configurent init uniquement. Pour sélectionner un studio existant, utilisez --studio CHEMIN.');
+ if(command==='init'){const config=options.global?await saveConfig(options.server||'https://studiorelay.fr',options['media-root']||process.cwd(),options.profile||'default'):await saveStudioConfig(options.server||'https://studiorelay.fr',options['media-root']||options.studio||process.cwd(),options.profile,options['expect-brand']);output({initialized:true,...config});return;}
  if(command==='update'){const latest=await latestVersion(fetch,15000);output({installed:VERSION,latest,updateAvailable:newer(latest),command:'npm install -g @studiorelay/cli@'+latest});return;}
- const config=await loadConfig(),store=new KeychainStore(config),client=new StudioRelayClient(config,store);
- if(command==='login'){
-  if(options['token-stdin']){if(process.stdin.isTTY)throw new Error('Fournissez le jeton par un pipe local, jamais en argument ni dans un prompt.');let raw='';for await(const chunk of process.stdin){raw+=chunk;if(raw.length>256)throw new Error('Jeton invalide.');}raw=raw.trim();if(!/^sr1_[a-f0-9]{32}_[A-Za-z0-9_-]{43}$/.test(raw))throw new Error('Format de jeton privé invalide.');await withCredentialLock(()=>store.set({kind:'legacy',token:raw}));}
-  else await login(config,store,!options['no-browser']);
-  output({connected:true,identity:await client.identity()});return;
+ let config=await loadConfig({studio:options.studio,requireLocal:['mcp','publish','login','bind'].includes(command)&&!options.global});const store=new KeychainStore(config);let client=new StudioRelayClient(config,store);
+ if(command==='login'){let pending:Credentials|null=null;const buffered={async get(){return pending},async set(value:Credentials){pending=value},async clear(){pending=null}};
+  if(options['token-stdin']){if(process.stdin.isTTY)throw new Error('Fournissez le jeton par un pipe local.');let raw='';for await(const chunk of process.stdin){raw+=chunk;if(raw.length>256)throw new Error('Jeton invalide.');}raw=raw.trim();if(!/^sr1_[a-f0-9]{32}_[A-Za-z0-9_-]{43}$/.test(raw))throw new Error('Format de jeton privé invalide.');pending={kind:'legacy',token:raw};}
+  else await login(config,buffered,!options['no-browser']);
+  const identity=await new StudioRelayClient(config,buffered).identity();config=await bindStudio(config,identity);await withCredentialLock(async()=>{if(!pending)throw new Error('Session absente.');await store.set(pending);});output({connected:true,profile:config.profile,mediaRoot:config.mediaRoot,binding:config.binding,identity});return;
  }
+ if(command==='bind'){if(!config.localFile)throw new Error('Initialisez un studio local avant bind.');const identity=await client.identity();config=await bindStudio(config,identity);output({bound:true,profile:config.profile,mediaRoot:config.mediaRoot,binding:config.binding,identity});return;}
  if(command==='logout'){output(await logout(config,store));return;}
+ if((command==='claude'||command==='codex')&&config.localFile){if(!['install','uninstall'].includes(subcommand))throw new Error('Choisir install ou uninstall.');output(await projectHost(config,command,subcommand==='uninstall'));return;}
  if(command==='claude'){output(subcommand==='install'?await installClaude():subcommand==='uninstall'?await uninstallClaude():(()=>{throw new Error('Choisir claude install ou claude uninstall.');})());return;}
  if(command==='codex'){output(subcommand==='install'?await installCodex():subcommand==='uninstall'?await uninstallCodex():(()=>{throw new Error('Choisir codex install ou codex uninstall.');})());return;}
- if(command==='doctor'){const me=await client.identity();output({connected:true,version:VERSION,server:config.server,mediaRoot:config.mediaRoot,identity:me});return;}
+ if(command==='doctor'){const me=await client.identity();output({connected:true,version:VERSION,server:config.server,mediaRoot:config.mediaRoot,profile:config.profile,configuration:config.localFile||'legacy-global',binding:config.binding,identity:me});return;}
  if(command==='accounts'){output(await client.accounts());return;}
  if(command==='schedule'){if(!options.from||!options.until)throw new Error('--from et --until requis.');output(await client.schedule(options.from,options.until));return;}
  if(command==='mcp'){runMcp(client);return;}

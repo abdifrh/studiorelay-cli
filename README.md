@@ -4,7 +4,7 @@
 
 Connectez votre studio de création à [StudioRelay](https://studiorelay.fr) pour préparer, importer et programmer vos vidéos avec Claude Code ou Codex. Un seul CLI, un serveur MCP local et un Skill par assistant réutilisent l’API StudioRelay existante.
 
-**Version des sources : 0.2.1 · Licence MIT · Windows, macOS et Linux.** Le package est disponible sur [npm](https://www.npmjs.com/package/@studiorelay/cli). Le backend privé et les secrets des réseaux sociaux ne sont pas distribués.
+**Version des sources : 0.3.0 · Licence MIT · Windows, macOS et Linux.** Le package est disponible sur [npm](https://www.npmjs.com/package/@studiorelay/cli). Le backend privé et les secrets des réseaux sociaux ne sont pas distribués.
 
 ## Sommaire
 
@@ -18,6 +18,47 @@ Connectez votre studio de création à [StudioRelay](https://studiorelay.fr) pou
 - [Dépannage](#dépannage)
 - [Mise à jour et désinstallation](#mise-à-jour-et-désinstallation)
 - [Développement et distribution](#développement-et-distribution)
+
+
+## Plusieurs studios et abonnements indépendants · 0.3.0
+
+Chaque studio possède `.studiorelay/config.json` dans son dossier de médias. Ce fichier ne contient aucun jeton : seulement serveur, profil, chemin local et identité de l’intégration/marque liée. Les identifiants restent dans le coffre système, séparés par serveur et profil. Choisir un profil unique par studio ; sans `--profile`, le CLI en génère un à partir du chemin canonique.
+
+```powershell
+cd "C:\CHEMIN\Studio"
+studiorelay init --server https://studiorelay.fr --media-root "C:\CHEMIN\Studio" --profile mon-studio --expect-brand slug-de-la-marque
+studiorelay login
+studiorelay doctor
+studiorelay accounts
+studiorelay claude install
+# Facultatif : installer aussi Codex dans ce studio
+studiorelay codex install
+```
+
+Les commandes doivent être lancées depuis le studio ou un de ses sous-dossiers. `--studio "CHEMIN_ABSOLU"` permet de le cibler explicitement depuis ailleurs. `--expect-brand` est facultatif mais recommandé pour refuser dès la première connexion une marque différente du slug attendu. La première connexion lie ensuite définitivement ce fichier à l’identifiant de l’intégration et de la marque : une reconnexion différente est bloquée avant de remplacer les identifiants locaux. Ne pas modifier cette liaison pour contourner un refus ; créer un dossier/configuration distinct pour une autre marque.
+
+`claude install` écrit une entrée de projet `.mcp.json` ; `codex install` écrit un bloc géré dans `.codex/config.toml` et un Skill local. Chaque entrée MCP passe explicitement `--studio` et garde donc son contexte, même si un autre terminal configure une autre marque. Les entrées tierces, paramètres d’abonnement et authentification Claude/Codex ne sont pas modifiés. Claude peut demander d’approuver le MCP de projet ; Codex ne charge sa configuration de projet que pour les projets approuvés. Redémarrer l’assistant après installation. [Configuration MCP Codex officielle](https://learn.chatgpt.com/docs/extend/mcp).
+
+Le même studio peut fonctionner avec n’importe lequel de vos abonnements Claude, ou avec Codex, sur la même session Windows. Le connecteur ne sélectionne pas l’abonnement et ne gère pas ses crédits. Le changement d’abonnement reste effectué dans le logiciel hôte. Chaque marque garde son autorisation StudioRelay et ses règles ; les studios peuvent tourner en parallèle.
+
+**Contrôles :** avant toute opération, le Skill fait lire `identity` et `list_accounts`, afficher dossier/marque/comptes et comparer avec la demande. Le client vérifie aussi l’identité avec le même jeton que celui utilisé pour chaque appel : une autre intégration ou marque bloque l’opération. Une modification de configuration pendant une session bloque le processus jusqu’au redémarrage. Ces contrôles complètent les permissions du serveur ; ils ne remplacent pas la vérification du contenu ni les autorisations de l’hôte.
+
+### Reprendre une session existante sans recréer le studio
+
+Relancer `init` **dans son vrai dossier**, avec son ancien nom de profil et `--expect-brand`. L’ancienne configuration globale n’est pas écrasée. Si le coffre contient déjà la bonne session :
+
+```sh
+studiorelay bind
+studiorelay doctor
+```
+
+`bind` vérifie l’identité puis enregistre uniquement la liaison locale. Si la session manque ou a expiré, faire `login` et sélectionner l’intégration existante dans StudioRelay, sans en créer une nouvelle. Si plusieurs anciens studios utilisaient `default`, une seule session était conservée pour ce profil : reconnecter chaque studio sous un profil distinct. Aucune marque ou programmation distante n’est supprimée.
+
+Pour les anciennes installations, `init --global` reste explicite ; MCP, login et publication sans studio local exigent désormais `--global` pour ce parcours historique. Il n’est pas adapté aux studios parallèles. Éviter tout MCP utilisateur ou option globale qui prendrait le pas sur le projet ; vérifier `/mcp` et `identity` après la migration. `doctor` indique la configuration effectivement utilisée. Les anciens MCP globaux ne publient plus sans configuration locale ou option globale explicite.
+
+`claude uninstall` / `codex uninstall`, lancés dans le dossier, retirent uniquement leurs éléments de projet gérés et inchangés ; les fichiers personnalisés sont conservés. `logout` révoque uniquement la session du profil résolu, pas celles des autres profils. Ne pas copier la configuration locale et les fichiers MCP entre machines : leurs chemins sont absolus. Réinitialiser sur l’autre machine et se reconnecter. Ne jamais mettre de secrets dans ces fichiers ou dans les prompts.
+
+Cette version doit être publiée sur npm avant que `npm install -g @studiorelay/cli@latest` ne l’installe ; vérifier `studiorelay --version` (0.3.0 minimum). Les sources GitHub et l’archive locale peuvent être utilisées avant cette publication.
 
 ## Installation
 
@@ -41,7 +82,7 @@ npm ci --ignore-scripts
 npm test
 npm run check:package
 npm pack
-npm install -g ./studiorelay-cli-0.2.1.tgz
+npm install -g ./studiorelay-cli-0.3.0.tgz
 ```
 
 </details>
@@ -72,7 +113,7 @@ studiorelay doctor
 
 Redémarrez l’assistant. Vérifiez le serveur MCP `studiorelay` avec `/mcp` ou les paramètres MCP de l’hôte. Dans Codex, invoquez le Skill avec `$studiorelay`. Dans Claude Code, utilisez le Skill StudioRelay pour vos demandes de diffusion.
 
-Les deux hôtes partagent le même profil StudioRelay et son coffre système. L’installation préserve les serveurs homonymes et les Skills personnalisés au lieu de les écraser. Claude Code respecte `CLAUDE_CONFIG_DIR`. Codex respecte `CODEX_HOME` pour le MCP ; son Skill personnel se trouve dans `~/.agents/skills/studiorelay`. Le schéma d’import est installé avec chaque Skill.
+Dans le parcours local 0.3.0, les deux hôtes partagent le profil de ce dossier et son coffre système. Les Skills sont installés dans `.claude/skills/studiorelay` et `.agents/skills/studiorelay` du projet. Le parcours utilisateur historique reste distinct ; il respecte `CLAUDE_CONFIG_DIR` / `CODEX_HOME`. Les installations préservent les entrées et Skills personnalisés.
 
 La connexion s’effectue sur l’ordinateur où tourne le CLI. `login --no-browser` affiche le lien sans ouvrir de navigateur, mais le retour vers `127.0.0.1` doit toujours atteindre ce même ordinateur. Les environnements distants n’accèdent pas automatiquement aux vidéos locales ; aucun flux d’authentification par code appareil n’est implémenté.
 
@@ -189,7 +230,7 @@ python manage.py configure_claude_connector
 
 ## Mise à jour et désinstallation
 
-À partir de 0.2.1 (après sa publication npm), les commandes interactives vérifient automatiquement les nouveautés au maximum une fois par 24 heures et affichent une commande de mise à jour sur stderr. Aucune installation automatique : votre accord reste nécessaire. Le MCP, les scripts sans terminal interactif et la CI ne font pas cette vérification. Une panne du registre reste silencieuse ; la requête est limitée à 1,5 seconde. Le cache `update-check.json` ne contient que la date du contrôle et une version publique. `STUDIORELAY_NO_UPDATE_CHECK=1` désactive cette détection. `update --check` reste une vérification explicite.
+À partir de 0.3.0 (après sa publication npm), les commandes interactives vérifient automatiquement les nouveautés au maximum une fois par 24 heures et affichent une commande de mise à jour sur stderr. Aucune installation automatique : votre accord reste nécessaire. Le MCP, les scripts sans terminal interactif et la CI ne font pas cette vérification. Une panne du registre reste silencieuse ; la requête est limitée à 1,5 seconde. Le cache `update-check.json` ne contient que la date du contrôle et une version publique. `STUDIORELAY_NO_UPDATE_CHECK=1` désactive cette détection. `update --check` reste une vérification explicite.
 
 Pour installer la dernière version publiée :
 
@@ -206,7 +247,7 @@ git pull origin main
 npm ci --ignore-scripts
 npm test
 npm pack
-npm install -g ./studiorelay-cli-0.2.1.tgz
+npm install -g ./studiorelay-cli-0.3.0.tgz
 studiorelay --version
 ```
 

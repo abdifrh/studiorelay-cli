@@ -41,3 +41,10 @@ TikTok via cette API privée transfère vers le parcours à finaliser dans TikTo
 Après un délai réseau ou un résultat incertain, utilisez `recover_operation` avec la clé initiale. Un 404 peut correspondre à une demande encore en cours. N’inventez pas une nouvelle clé pour contourner l’incertitude. Ne rejouez pas l’ancien jeton après une erreur de renouvellement : faites reconnecter le CLI et vérifier les sessions.
 
 `cancel_publication` exige le droit `cancel`, une révision fraîche et une publication créée par cette intégration, non engagée à distance. Il ne supprime pas de contenu social. Les opérations distantes ou incertaines doivent être résolues dans StudioRelay.
+
+
+## Vérification obligatoire du studio
+
+Avant toute préparation ou importation, appeler `identity`, puis `list_accounts`. Afficher à l’utilisateur le dossier local (`local_studio.mediaRoot`), le profil, la marque et les réseaux/comptes visés. Comparer cette identité au studio et à la marque demandés ; en cas de différence, arrêter sans import ni approbation et demander de corriger le raccordement. Ne jamais changer de configuration, d’intégration ou de dossier pour contourner cette vérification. Ne jamais déduire un identifiant de compte d’une ancienne conversation : utiliser ceux de la réponse actuelle.
+
+Le dossier détermine StudioRelay, indépendamment de l’abonnement Claude/Codex. Relire l’identité lors d’une reprise ou d’un changement de studio. La vérification n’exige pas de reconfirmation par vidéo lorsque l’approbation automatique est déjà autorisée. Les profils locaux liés vérifient aussi l’identité côté client avant chaque appel et bloquent une session différente.

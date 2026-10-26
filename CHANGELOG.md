@@ -1,3 +1,10 @@
+# 0.3.0
+
+- Per-directory studio configs and explicit project MCP contexts for Claude Code/Codex.
+- Pinned integration/brand identity, per-request checks, expected-brand first-login guard, non-overwriting login and bind for existing sessions.
+- Local config snapshot checks; no silent global fallback for MCP/login/publication. Legacy mode requires explicit --global.
+- Mandatory assistant identity/account verification, bilingual migration instructions, independent host subscriptions.
+
 # Historique · Changelog
 
 ## 0.2.1 — prochaine publication / pending npm publication

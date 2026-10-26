@@ -6,7 +6,7 @@ import {StudioRelayClient,APIError,type Manifest,type Review} from './client.js'
 import {VERSION} from './version.js';
 const id=z.string().uuid(),date=z.iso.datetime({offset:true});
 export function createMcpServer(client:StudioRelayClient){
- const server=new McpServer({name:'studiorelay',version:VERSION});
+ const server=new McpServer({name:'studiorelay',version:VERSION},{instructions:'Avant toute préparation, appelez identity puis list_accounts. Affichez le dossier local, la marque et les comptes visés ; comparez avec la demande. En cas de différence, arrêtez sans import ni approbation. Ne modifiez pas le profil pour contourner un refus. Les abonnements Claude/Codex sont indépendants de la marque StudioRelay. Respectez les droits serveur, les règles éditoriales et les clés d’idempotence. Une programmation ne prouve pas une publication sociale.'});
  const reviews=new Map<string,{batch:string;review:Review;integration:string;expires:number}>();
  function register(name:string,description:string,schema:z.ZodObject,readOnly:boolean,handler:(input:any)=>Promise<unknown>){
   server.registerTool(name,{description,inputSchema:schema,annotations:{readOnlyHint:readOnly,destructiveHint:!readOnly,idempotentHint:true,openWorldHint:true}},async(input)=>{
@@ -14,7 +14,7 @@ export function createMcpServer(client:StudioRelayClient){
    catch(error){const value=error instanceof APIError?{code:error.code,status:error.status,message:error.message,details:error.details}:{code:'client_error',message:error instanceof Error?error.message:'Erreur du connecteur.'};return {isError:true,content:[{type:'text' as const,text:JSON.stringify({error:value})}]};}
   });
  }
- register('identity','Consulter les droits et limites effectifs ; aucun secret social.',z.object({}).strict(),true,()=>client.identity());
+ register('identity','Consulter les droits et limites effectifs ; aucun secret social.',z.object({}).strict(),true,async()=>({...await client.identity(),local_studio:{profile:client.config.profile,mediaRoot:client.config.mediaRoot,binding:client.config.binding,configuration:client.config.localFile||'legacy-global'}}));
  register('list_accounts','Lister uniquement les comptes autorisés. Paginer si count dépasse les résultats.',z.object({offset:z.number().int().min(0).max(10000).default(0)}).strict(),true,({offset})=>client.accounts(offset));
  register('list_publications','Lister les publications du studio. scope=accounts exige read_history ; ne permet pas leur annulation depuis une autre intégration.',z.object({scope:z.enum(['own','accounts']).default('own'),account_id:z.number().int().positive().optional(),state:z.enum(['draft','ready','scheduled','sending','processing','published','failed','cancelled','review','manual']).optional(),offset:z.number().int().min(0).max(10000).default(0)}).strict(),true,input=>client.publications(Object.fromEntries(Object.entries(input).filter(([,v])=>v!==undefined).map(([k,v])=>[k,String(v)]))));
  register('get_schedule','Consulter le planning et les occupations des comptes autorisés, avec neuf jours de contexte pour l’espacement. Ne réserve rien.',z.object({from:date,until:date,offset:z.number().int().min(0).default(0)}).strict(),true,async({from,until,offset})=>{const planning=await client.schedule(from,until);return {...planning,offset,results:planning.results.slice(offset,offset+100),next_offset:offset+100<planning.results.length?offset+100:null,truncated:offset+100<planning.results.length};});

@@ -3,7 +3,7 @@ import {createReadStream,openAsBlob} from 'node:fs';
 import {realpath,stat,mkdir,readFile,writeFile} from 'node:fs/promises';
 import {resolve,relative,isAbsolute,join} from 'node:path';
 import {bearer,type CredentialStore} from './credentials.js';
-import {configDirectory,origin,type Config} from './config.js';
+import {configDirectory,origin,assertStudioConfig,assertStudioIdentity,type Config} from './config.js';
 import {chooseDates} from './planning.mjs';
 import type {components} from './contracts.js';
 export type Publication=components['schemas']['Publication'];
@@ -19,7 +19,15 @@ export class StudioRelayClient {
  constructor(public config:Config,private store:CredentialStore,private fetcher:typeof fetch=fetch){this.config={...config,server:origin(config.server,process.env.STUDIORELAY_ALLOW_LOOPBACK==='1')};}
  async request<T>(path:string,method='GET',body?:BodyInit,headers:Record<string,string>={}):Promise<T>{
   if(!path.startsWith('/api/v1/')||path.includes('..')||path.includes('://'))throw new Error('Route API interdite.');
+  await assertStudioConfig(this.config);
+  if(this.config.localFile&&!this.config.binding&&path!=='/api/v1/identity/')throw new Error('Studio non lié : connectez-le avec studiorelay login avant toute opération.');
   const secret=await bearer(this.config,this.store,this.fetcher);
+  if(this.config.binding&&path!=='/api/v1/identity/')assertStudioIdentity(this.config,await this.send<Identity>('/api/v1/identity/','GET',undefined,{},secret));
+  const result=await this.send<T>(path,method,body,headers,secret);
+  if(path==='/api/v1/identity/')assertStudioIdentity(this.config,result as Identity);
+  return result;
+ }
+ private async send<T>(path:string,method:string,body:BodyInit|undefined,headers:Record<string,string>,secret:string):Promise<T>{
   const response=await this.fetcher(this.config.server+path,{method,body,redirect:'error',signal:AbortSignal.timeout(method==='GET'?30000:300000),headers:{...headers,Authorization:'Bearer '+secret}});
   let payload:{data?:T;error?:{code?:string;message?:string;details?:unknown}};
   try{payload=await response.json();}catch{throw new APIError('invalid_response','Réponse API illisible. Une mutation peut être en cours : consulter son opération.',response.status);}
